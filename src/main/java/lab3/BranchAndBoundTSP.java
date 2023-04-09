@@ -3,12 +3,9 @@ package lab3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static util.GraphUtil.fillAdjMatrixFromFile;
 
 class BranchAndBoundTSP {
 
@@ -187,21 +184,8 @@ class BranchAndBoundTSP {
         // Reading data using readLine
         String filepath = reader.readLine();
 
-        List<String> strings;
-        try (Stream<String> stream = Files.lines(Paths.get(filepath))) {
-            strings = stream.filter(str -> str.length() > 2).collect(Collectors.toList());
-        }
-        int verticesCount = strings.size();
-        int[][] adjacency_matrix = new int[verticesCount][verticesCount];
-
-        //Fill graph with values
-        for (int i = 0; i < verticesCount; i++) {
-            String[] valuesFor0Node = strings.get(i).split(" ");
-            for (int j = 0; j < valuesFor0Node.length; j++) {
-                adjacency_matrix[i][j] = Integer.parseInt(valuesFor0Node[j]);
-            }
-        }
-        TSP(adjacency_matrix, verticesCount);
+        int[][] matrix = fillAdjMatrixFromFile(filepath);
+        TSP(matrix, matrix.length);
 
         System.out.printf("Мінімальний шлях: %d\n", final_res);
         System.out.print("Шлях: : ");
